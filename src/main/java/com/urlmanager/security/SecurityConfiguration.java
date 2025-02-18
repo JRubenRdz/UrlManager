@@ -13,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.urlmanager.entity.Roles;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
@@ -34,8 +36,8 @@ public class SecurityConfiguration {
 		http.csrf().disable()
 			.authorizeHttpRequests()
 				// LOGIN
-				.requestMatchers("/login").permitAll()
-				.requestMatchers(HttpMethod.POST, "/admin").permitAll();
+			.requestMatchers("/**").permitAll()
+			.requestMatchers("/admin").hasAuthority("ADMIN");
 
 		http.addFilterBefore(JWTAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 		return http.build();

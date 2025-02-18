@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import com.urlmanager.entity.Admin;
 import com.urlmanager.entity.Roles;
@@ -13,6 +14,7 @@ import com.urlmanager.security.JWTUtils;
 
 import jakarta.transaction.Transactional;
 
+@Service
 public class AdminService {
 	
 	@Autowired

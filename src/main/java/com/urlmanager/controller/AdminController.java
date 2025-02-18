@@ -1,9 +1,13 @@
 package com.urlmanager.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.urlmanager.entity.Admin;
+import com.urlmanager.entity.Roles;
 import com.urlmanager.service.AdminService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,6 +36,7 @@ public class AdminController {
 		if (adminService.findByUsername(admin.getUsername()).isPresent()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El username ya está en uso");
 		} else {
+			admin.setRol(Roles.ADMIN);
 			Admin a = adminService.saveAdmin(admin);
 			if (a != null) {
 				return ResponseEntity.status(HttpStatus.CREATED).body("Administrador creado exitosamente");
@@ -65,4 +71,20 @@ public class AdminController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Administrador no encontrado");
 		}
 	}
+	
+	/* BUSCAR ADMIN
+	@GetMapping("/{username}")
+	@Operation(summary = "Obtener admin por usuario")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = ""),
+			@ApiResponse(responseCode = "404", description = "Administrador no encontrado") })
+	public ResponseEntity<?> findByUsername(@PathVariable String username) {
+		try {
+			Optional<Admin> foundAdmin = adminService.findByUsername(username);
+			return ResponseEntity.status(HttpStatus.OK).body(foundAdmin.get().getUsername());
+		}
+		catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Admin no encontrado");
+		}
+	}
+	*/
 }

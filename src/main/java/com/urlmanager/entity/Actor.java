@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -15,7 +16,7 @@ public abstract class Actor extends DomainEntity{
 	@NotBlank
 	private String password;
 	
-	@NotBlank
+	@NotNull
 	private Roles rol;
 	
 	public Actor () {
