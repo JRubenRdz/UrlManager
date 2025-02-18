@@ -9,5 +9,5 @@ import com.urlmanager.entity.Entorno;
 
 @Repository
 public interface EntornoRepository extends JpaRepository<Entorno, Integer>{
-	public Optional<Entorno> findByNombre(String nombre);
+	public Optional<Entorno> findByName(String nombre);
 }

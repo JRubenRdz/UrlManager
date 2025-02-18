@@ -7,6 +7,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.urlmanager.entity.Cliente;
+import com.urlmanager.entity.Entorno;
 import com.urlmanager.entity.Url;
 import com.urlmanager.repository.UrlRepository;
 import com.urlmanager.security.JWTUtils;
@@ -22,12 +23,17 @@ public class UrlService {
 	@Autowired
 	private ClienteService clienteService;
 	
+	
 	@Autowired
 	private JWTUtils JWTUtils;
 	
 	public Set<Url> getAllUrlsByCliente() {
 		Cliente cliente = JWTUtils.userLogin();
 		return cliente.getUrls();
+	}
+	
+	public Set<Url> getAllUrlsByEntorno(Entorno e) {
+		return e.getUrls();
 	}
 	
 	public Url getUrlById(int id) {

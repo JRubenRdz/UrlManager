@@ -1,7 +1,6 @@
 package com.urlmanager.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -12,30 +11,30 @@ import jakarta.validation.constraints.NotBlank;
 public class Entorno extends DomainEntity {
 	
 	@NotBlank
-	private String nombre;
+	private String name;
 	
 	@OneToMany(mappedBy = "entorno", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Url> urls = new ArrayList<>();
+    private Set<Url> urls;
 
-	public Entorno(String nombre, List<Url> urls) {
+	public Entorno(String name, Set<Url> urls) {
 		super();
-		this.nombre = nombre;
+		this.name = name;
 		this.urls = urls;
 	}
 
-	public String getNombre() {
-		return nombre;
+	public String getName() {
+		return name;
 	}
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public List<Url> getUrls() {
+	public Set<Url> getUrls() {
 		return urls;
 	}
 
-	public void setUrls(List<Url> urls) {
+	public void setUrls(Set<Url> urls) {
 		this.urls = urls;
 	}
 	

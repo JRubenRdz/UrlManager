@@ -17,6 +17,8 @@ import com.urlmanager.entity.Cliente;
 import com.urlmanager.service.ActorService;
 import com.urlmanager.service.AdminService;
 import com.urlmanager.service.ClienteService;
+import com.urlmanager.service.EntornoService;
+import com.urlmanager.service.UrlService;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -41,11 +43,11 @@ public class JWTUtils {
 
 	@Autowired
 	@Lazy
-	private SocioService socioService;
+	private EntornoService entornoService;
 
 	@Autowired
 	@Lazy
-	private AyuntamientoService ayuntamientoService;
+	private UrlService urlService;
 
 	public static String getToken(HttpServletRequest request) {
 		String tokenBearer = request.getHeader("Authorization");
@@ -94,9 +96,9 @@ public class JWTUtils {
 				Actor actor = actorO.get();
 				switch (actor.getRol()) {
 				case CLIENTE:
-					Optional<Cliente> casetaOptional = clienteService.findByUsername(username);
-					if (casetaOptional.isPresent()) {
-						res = (T) casetaOptional.get();
+					Optional<Cliente> clienteOptional = clienteService.findByUsername(username);
+					if (clienteOptional.isPresent()) {
+						res = (T) clienteOptional.get();
 					}
 					break;
 				case ADMIN:
