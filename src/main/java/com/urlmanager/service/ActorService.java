@@ -14,7 +14,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.urlmanager.entity.Actor;
+import com.urlmanager.entity.Cliente;
 import com.urlmanager.repository.ActorRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class ActorService implements UserDetailsService {
@@ -37,6 +40,17 @@ public class ActorService implements UserDetailsService {
 		} else {
 			throw new UsernameNotFoundException("Usuario no encontrado");
 		}
+	}
+	
+	@Transactional
+	public boolean createCliente(Cliente cliente) {
+		boolean res = false;
+		Optional<Actor> actorO = this.findByUsername(cliente.getUsername());
+		if (actorO.isPresent()) {
+			actorRepository.save(cliente);
+			res = true;
+		}
+		return res;
 	}
 
 }

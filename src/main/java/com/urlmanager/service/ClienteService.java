@@ -18,58 +18,55 @@ import jakarta.transaction.Transactional;
 @Service
 public class ClienteService {
 
-	@Autowired
-	private ClienteRepository clienteRepository;
-	
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-	
-	@Autowired
-	private JWTUtils JWTUtils;
-	
-	@Transactional
-	public Cliente saveCliente(Cliente cliente) {
-		cliente.setUrls(new HashSet<>());
-		cliente.setRol(Roles.CLIENTE);
-		cliente.setPassword(passwordEncoder.encode(cliente.getPassword()));
-		return clienteRepository.save(cliente);
-	}
-	
-	
-	@Transactional
-	public Cliente updateCliente(Cliente clienteU) {
-		Cliente cliente = JWTUtils.userLogin();
-		if (cliente != null) {
-			cliente.setUsername(clienteU.getUsername());
-			cliente.setPassword(clienteU.getPassword());
-			cliente.setUrls(clienteU.getUrls());
+    @Autowired
+    private ClienteRepository clienteRepository;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    
+    @Autowired
+    private JWTUtils JWTUtils;
+    
+    @Transactional
+    public Cliente saveCliente(Cliente cliente) {
+        cliente.setEntornos(new HashSet<>());
+        cliente.setRol(Roles.CLIENTE);
+        cliente.setPassword(passwordEncoder.encode(cliente.getPassword()));
+        return clienteRepository.save(cliente);
+    }
+    
+    @Transactional
+    public Cliente updateCliente(Cliente clienteU) {
+        Cliente cliente = JWTUtils.userLogin();
+        if (cliente != null) {
+            cliente.setUsername(clienteU.getUsername());
+            cliente.setPassword(clienteU.getPassword());
+            cliente.setEntornos(clienteU.getEntornos());
 
-			return clienteRepository.save(cliente);
-		}
-		return null;
-	}
-	
-	public List<Cliente> getAllClientes() {
-		return clienteRepository.findAll();
-	}
-	
-	public Optional<Cliente> getClienteById(int id) {
-		return clienteRepository.findById(id);
-	}
-	
-	public Optional<Cliente> findByUsername(String username) {
-		return clienteRepository.findByUsername(username);
-	}
-	
-	@Transactional
-	public boolean deleteCliente() {
-		Cliente cliente = JWTUtils.userLogin();
-		if (cliente != null) {
-			clienteRepository.deleteById(cliente.getId());
-			return true;
-		}
-		return false;
-	}
-	
-	
+            return clienteRepository.save(cliente);
+        }
+        return null;
+    }
+    
+    public List<Cliente> getAllClientes() {
+        return clienteRepository.findAll();
+    }
+    
+    public Optional<Cliente> getClienteById(int id) {
+        return clienteRepository.findById(id);
+    }
+    
+    public Optional<Cliente> findByUsername(String username) {
+        return clienteRepository.findByUsername(username);
+    }
+    
+    @Transactional
+    public boolean deleteCliente() {
+        Cliente cliente = JWTUtils.userLogin();
+        if (cliente != null) {
+            clienteRepository.deleteById(cliente.getId());
+            return true;
+        }
+        return false;
+    }
 }

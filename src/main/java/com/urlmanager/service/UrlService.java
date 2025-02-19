@@ -5,8 +5,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import com.urlmanager.entity.Cliente;
 import com.urlmanager.entity.Entorno;
 import com.urlmanager.entity.Url;
 import com.urlmanager.repository.UrlRepository;
@@ -14,69 +14,59 @@ import com.urlmanager.security.JWTUtils;
 
 import jakarta.transaction.Transactional;
 
-
+@Service
 public class UrlService {
-	
-	@Autowired
-	private UrlRepository urlRepository;
-	
-	@Autowired
-	private ClienteService clienteService;
-	
-	
-	@Autowired
-	private JWTUtils JWTUtils;
-	
-	public Set<Url> getAllUrlsByCliente() {
-		Cliente cliente = JWTUtils.userLogin();
-		return cliente.getUrls();
-	}
-	
-	public Set<Url> getAllUrlsByEntorno(Entorno e) {
-		return e.getUrls();
-	}
-	
-	public Url getUrlById(int id) {
-		Optional<Url> urlO = urlRepository.findById(id);
-		if (urlO.isPresent()) {
-			Object userLogin = JWTUtils.userLogin();
-			if (userLogin instanceof Cliente) {
-				Cliente cliente = (Cliente) userLogin;
-				cliente.getUrls().contains(urlO.get());
-				return urlO.get();
-			}
-		}
-		return null;
-	}
-	
-	@Transactional
-	public Url save(Url u, int idCli) {
-		Url res = null;
-		Optional<Cliente> clienteO = clienteService.getClienteById(idCli);
-		if (!clienteO.isEmpty()) {
-			u.setFechaCreacion(LocalDateTime.now());
+    
+    @Autowired
+    private UrlRepository urlRepository;
 
-			res = urlRepository.save(u);
-
-			Cliente cliente = clienteO.get();
-			cliente.getUrls().add(u);
-			clienteService.saveCliente(cliente);
-		}
-		return res;
-	}
-	
-	
-	public boolean deleteUrl(int id) {
-		boolean res = false;
-		Optional<Url> urlO = urlRepository.findById(id);
-		if (urlO.isPresent()) {
-			Cliente cliente = JWTUtils.userLogin();
-			if (cliente.getUrls().contains(urlO.get())) {
-				urlRepository.deleteById(id);
-				res = true;
-			}
-		}
-		return res;
-	}
-	
+	@Autowired
+	private EntornoService entornoService;
+    
+    @Autowired
+    private JWTUtils JWTUtils;
+    
+    public Set<Url> getAllUrlsByEntorno(Optional<Entorno> e) {
+        return e.get().getUrls();
+    }
+    
+    public Url getUrlById(int id) {
+        Optional<Url> urlO = urlRepository.findById(id);
+        if (urlO.isPresent()) {
+            Object userLogin = JWTUtils.userLogin();
+            if (userLogin instanceof Entorno) {
+                Entorno entorno = (Entorno) userLogin;
+                entorno.getUrls().contains(urlO.get());
+                return urlO.get();
+            }
+        }
+        return null;
+    }
+    
+    @Transactional
+    public Url save(Url u, int entCod) {
+        Url res = null;
+        Optional<Entorno> entornoO = entornoService.getEntornoById(entCod);
+        if (!entornoO.isEmpty()) {
+            u.setFechaCreacion(LocalDateTime.now());
+            res = urlRepository.save(u);
+            Entorno entorno = entornoO.get();
+            entorno.getUrls().add(u);
+            entornoService.saveEntorno(entorno);
+        }
+        return res;
+    }
+    
+    public boolean deleteUrl(int id) {
+        boolean res = false;
+        Optional<Url> urlO = urlRepository.findById(id);
+        if (urlO.isPresent()) {
+            Entorno entorno = JWTUtils.userLogin();
+            if (entorno.getUrls().contains(urlO.get())) {
+                urlRepository.deleteById(id);
+                res = true;
+            }
+        }
+        return res;
+    }
 }

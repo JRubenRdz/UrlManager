@@ -27,7 +27,7 @@ import jakarta.servlet.http.HttpServletRequest;
 @Component
 public class JWTUtils {
 	private static final String JWT_FIRMA = "JaviSBC";
-	private static final long EXTENCION_TOKEN = 86400000;
+	private static final long EXTENSION_TOKEN = 3600000;
 	
 	@Autowired
 	@Lazy
@@ -62,7 +62,7 @@ public class JWTUtils {
 			Jwts.parser().setSigningKey(JWT_FIRMA).parseClaimsJws(token);
 			return true;
 		} catch (Exception e) {
-			throw new AuthenticationCredentialsNotFoundException("JWT ha experido o no es valido");
+			throw new AuthenticationCredentialsNotFoundException("El token ha expirado o no es valido");
 		}
 	}
 
@@ -73,7 +73,7 @@ public class JWTUtils {
 	public static String generateToken(Authentication authentication) {
 		String username = authentication.getName();
 		Date fechaActual = new Date();
-		Date fechaExpiracion = new Date(fechaActual.getTime() + EXTENCION_TOKEN);
+		Date fechaExpiracion = new Date(fechaActual.getTime() + EXTENSION_TOKEN);
 		String rol = authentication.getAuthorities().iterator().next().getAuthority();
 
 		String token = Jwts.builder()

@@ -13,33 +13,47 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.urlmanager.entity.Roles;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
-	@Autowired
-	private JWTAuthenticationFilter JWTAuthenticationFilter;
+    @Autowired
+    private JWTAuthenticationFilter JWTAuthenticationFilter;
 
-	@Bean
-	AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-		return authenticationConfiguration.getAuthenticationManager();
-	}
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 
-	@Bean
-	PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-	
-	@Bean
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+    
+    @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.csrf().disable()
-			.authorizeHttpRequests()
-				// LOGIN
-			.requestMatchers("/**").permitAll()
-			.requestMatchers("/admin").hasAuthority("ADMIN");
+        http.csrf().disable()
+            .authorizeHttpRequests()
+                // LOGIN
+            .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                // REGISTRO
+            .requestMatchers(HttpMethod.POST, "/cliente").permitAll()
+                // ADMIN
+            .requestMatchers(HttpMethod.PUT, "/admin").hasAuthority("ADMIN")
+            .requestMatchers(HttpMethod.DELETE, "/admin").hasAuthority("ADMIN")
+                // CLIENTE
+            .requestMatchers(HttpMethod.PUT, "/cliente").hasAuthority("ADMIN")
+            .requestMatchers(HttpMethod.DELETE, "/cliente").hasAuthority("ADMIN")
+                // ENTORNO
+            .requestMatchers(HttpMethod.POST, "/entorno/create").hasAuthority("CLIENTE")
+            .requestMatchers(HttpMethod.PUT, "/entorno").hasAuthority("CLIENTE")
+            .requestMatchers(HttpMethod.DELETE, "/entorno").hasAuthority("CLIENTE")
+            .requestMatchers(HttpMethod.POST, "/entorno/anadirUrl/**").hasAuthority("CLIENTE")
+            .requestMatchers(HttpMethod.POST, "/entorno/actualizarUrl/**").hasAuthority("CLIENTE")
+            .requestMatchers(HttpMethod.GET, "/entorno/eliminarUrl").hasAuthority("CLIENTE")
+            .requestMatchers(HttpMethod.GET, "/entorno").hasAuthority("CLIENTE")
+            .anyRequest().authenticated();
 
-		http.addFilterBefore(JWTAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-		return http.build();
-	}
+        http.addFilterBefore(JWTAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
 }

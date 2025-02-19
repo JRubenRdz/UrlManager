@@ -66,7 +66,7 @@ public class ClienteController {
 		} else {
 			Cliente c = clienteService.saveCliente(cliente);
 			if (c != null) {
-				return ResponseEntity.status(HttpStatus.CREATED).body("Clietne creado exitosamente");
+				return ResponseEntity.status(HttpStatus.CREATED).body("Cliente creado exitosamente");
 			} else {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo crear el cliente");
 			}
