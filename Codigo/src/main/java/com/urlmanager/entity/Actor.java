@@ -16,6 +16,9 @@ public abstract class Actor extends DomainEntity{
 	@NotBlank
 	private String password;
 	
+	@NotBlank
+	private String email;
+	
 	@NotNull
 	private Roles rol;
 	
