@@ -3,6 +3,7 @@ package com.urlmanager.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -16,6 +17,7 @@ public abstract class Actor extends DomainEntity{
 	@NotBlank
 	private String password;
 	
+	@Email
 	@NotBlank
 	private String email;
 	
