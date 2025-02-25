@@ -39,7 +39,7 @@ public class SolicitudEntornoService {
         Optional<SolicitudEntorno> solicitudOpt = getSolicitudEntornoById(id);
         if (solicitudOpt.isPresent()) {
             SolicitudEntorno solicitud = solicitudOpt.get();
-            solicitud.setEstado(EstadoSolicitud.ACEPTADA);
+            solicitud.setEstado(EstadoSolicitud.ACEPTADO);
             Entorno entorno = new Entorno();
             entorno.setName(solicitud.getNombreEntorno());
             entorno.setCliente(solicitud.getCliente());
@@ -55,7 +55,7 @@ public class SolicitudEntornoService {
         Optional<SolicitudEntorno> solicitudOpt = getSolicitudEntornoById(id);
         if (solicitudOpt.isPresent()) {
             SolicitudEntorno solicitud = solicitudOpt.get();
-            solicitud.setEstado(EstadoSolicitud.RECHAZADA);
+            solicitud.setEstado(EstadoSolicitud.RECHAZADO);
             solicitudEntornoRepository.save(solicitud);
             return true;
         }

@@ -59,6 +59,17 @@ public class ClienteService {
     public Optional<Cliente> findByUsername(String username) {
         return clienteRepository.findByUsername(username);
     }
+
+    @Transactional
+    public boolean deleteClienteById(int idCliente) {
+        Optional<Cliente> cliente = clienteRepository.findById(idCliente);
+        if (cliente.isPresent()) {
+            clienteRepository.deleteById(idCliente);
+            return true;
+        } else {
+            return false;
+        }
+    }
     
     @Transactional
     public boolean deleteCliente() {

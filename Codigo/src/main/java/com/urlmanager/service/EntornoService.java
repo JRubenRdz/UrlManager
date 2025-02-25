@@ -56,6 +56,10 @@ public class EntornoService {
     public Optional<Entorno> findByName(String name) {
         return entornoRepository.findByName(name);
     }
+
+    public Optional<List<Entorno>> findAllEntornosByClienteId(int idCliente) {
+        return entornoRepository.findByClienteId(idCliente);
+    }
     
     @Transactional
     public boolean deleteEntorno(int id) {

@@ -36,4 +36,29 @@ public class ClienteController {
             }
         }
     }
+
+    @DeleteMapping
+    @ApiResponses(value = { @ApiResponse(responseCode = "201", description = "Cliente eliminado exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida"),
+            @ApiResponse(responseCode = "409", description = "No existe el cliente") })
+        public ResponseEntity<String> deleteCliente(){
+            if (clienteService.deleteCliente()) {
+                return ResponseEntity.status(HttpStatus.CREATED).body("Cliente eliminado exitosamente");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo eliminar el cliente");
+            }
+        }
+
+        @DeleteMapping("/{id}")
+        @ApiResponses(value = { @ApiResponse(responseCode = "201", description = "Cliente eliminado exitosamente"),
+                @ApiResponse(responseCode = "400", description = "Solicitud inválida"),
+                @ApiResponse(responseCode = "409", description = "No existe el cliente") })
+        public ResponseEntity<String> deleteClienteById(@PathVariable int id) {
+            if (clienteService.deleteClienteById(id)) {
+                return ResponseEntity.status(HttpStatus.OK).body("Cliente eliminado exitosamente");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo eliminar el cliente");
+            }
+        }
+
 }

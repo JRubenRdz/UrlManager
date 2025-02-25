@@ -43,9 +43,11 @@ public class SecurityConfiguration {
             .requestMatchers(HttpMethod.DELETE, "/admin").hasAuthority("ADMIN")
                 // CLIENTE
             .requestMatchers(HttpMethod.PUT, "/cliente").hasAuthority("ADMIN")
-            .requestMatchers(HttpMethod.DELETE, "/cliente").hasAuthority("ADMIN")
+            .requestMatchers(HttpMethod.DELETE, "/cliente").hasAuthority("CLIENTE")
+            .requestMatchers(HttpMethod.DELETE, "/cliente/{id}").hasAuthority("ADMIN")
                 // ENTORNO
-            .requestMatchers(HttpMethod.GET, "/entorno").hasAuthority("CLIENTE")
+            .requestMatchers(HttpMethod.GET, "/entorno").hasAuthority("ADMIN")
+            .requestMatchers(HttpMethod.GET, "/entorno/{idCliente}").hasAuthority("ADMIN")
             .requestMatchers(HttpMethod.GET, "/entorno/{id}").hasAuthority("CLIENTE")
             .requestMatchers(HttpMethod.GET, "/entorno/{entornoCod}/urls").hasAuthority("CLIENTE")
             .requestMatchers(HttpMethod.GET, "/entorno/eliminarUrl/{idUrl}").hasAuthority("CLIENTE")

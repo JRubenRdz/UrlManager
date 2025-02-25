@@ -16,10 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.urlmanager.entity.Cliente;
 import com.urlmanager.entity.Entorno;
 import com.urlmanager.entity.Url;
-import com.urlmanager.security.JWTUtils;
 import com.urlmanager.service.EntornoService;
 import com.urlmanager.service.UrlService;
 
@@ -39,9 +37,6 @@ public class EntornoController {
 	@Autowired
 	private UrlService urlService;
 
-	@Autowired
-	private JWTUtils jwtUtils;
-
 	@GetMapping
 	@Operation(summary = "Obtener todos los entornos")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Lista de entornos obtenida exitosamente"),
@@ -50,6 +45,20 @@ public class EntornoController {
 		List<Entorno> entornos = entornoService.getAllEntornos();
 		return ResponseEntity.ok(entornos);
 	}
+
+	@GetMapping("/{idCliente}")
+	@Operation(summary = "Obtener todos los entornos de un cliente")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Lista de entornos obtenida exitosamente"),
+			@ApiResponse(responseCode = "500", description = "Error interno del servidor") })
+	public ResponseEntity<List<Entorno>> getAllEntornosByCliente(@PathVariable int idCliente) {
+		Optional<List<Entorno>> entornos = entornoService.findAllEntornosByClienteId(idCliente);
+		if (entornos.isPresent()) {
+			return ResponseEntity.ok(entornos.get());
+		} else {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
+		
 
 	@GetMapping("/{id}")
 	@Operation(summary = "Buscar un entorno por ID")
