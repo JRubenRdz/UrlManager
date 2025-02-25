@@ -9,8 +9,7 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public abstract class Actor extends DomainEntity{
-    
+public abstract class Actor extends DomainEntity{    
     @NotBlank
     private String username;
     
@@ -27,6 +26,7 @@ public abstract class Actor extends DomainEntity{
     public Actor () {
         super();
     }
+
 
     public String getUsername() {
         return username;
