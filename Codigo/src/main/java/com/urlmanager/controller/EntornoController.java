@@ -117,27 +117,6 @@ public class EntornoController {
 		return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Entorno no encontrado");
 	}
 
-	@PostMapping("/create")
-	@ApiResponses(value = { @ApiResponse(responseCode = "201", description = "Entorno creado exitosamente"),
-			@ApiResponse(responseCode = "400", description = "Solicitud inválida"),
-			@ApiResponse(responseCode = "409", description = "El entorno ya existe") })
-	public ResponseEntity<String> saveEntorno(@RequestBody String name) {
-		Cliente clienteLogeado = jwtUtils.userLogin();
-		Entorno entorno = new Entorno();
-		entorno.setName(name);
-		entorno.setCliente(clienteLogeado);
-		if (entornoService.findByName(entorno.getName()).isPresent()) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El entorno ya existe");
-		} else {
-			Entorno ent = entornoService.saveEntorno(entorno);
-			if (ent != null) {
-				return ResponseEntity.status(HttpStatus.CREATED).body("Entorno creado exitosamente");
-			} else {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo crear el entorno");
-			}
-		}
-	}
-
 	@PutMapping
 	@Operation(summary = "Actualizar un entorno existente")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Entorno actualizado exitosamente"),

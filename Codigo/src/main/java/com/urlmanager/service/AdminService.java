@@ -70,6 +70,7 @@ public class AdminService {
 	public void adminPorDefecto() {
 		if (this.getAllAdmins().size() <= 0) {
 			Admin defaultAdmin = new Admin();
+			defaultAdmin.setEmail("admin@admin.es");
 			defaultAdmin.setUsername("admin");
 			defaultAdmin.setPassword(passwordEncoder.encode("1234"));
 			defaultAdmin.setRol(Roles.ADMIN);

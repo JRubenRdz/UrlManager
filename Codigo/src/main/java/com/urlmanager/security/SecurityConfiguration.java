@@ -38,19 +38,27 @@ public class SecurityConfiguration {
                 // REGISTRO
             .requestMatchers(HttpMethod.POST, "/cliente").permitAll()
                 // ADMIN
+            .requestMatchers(HttpMethod.POST, "/admin").hasAnyAuthority("ADMIN")
             .requestMatchers(HttpMethod.PUT, "/admin").hasAuthority("ADMIN")
             .requestMatchers(HttpMethod.DELETE, "/admin").hasAuthority("ADMIN")
                 // CLIENTE
             .requestMatchers(HttpMethod.PUT, "/cliente").hasAuthority("ADMIN")
             .requestMatchers(HttpMethod.DELETE, "/cliente").hasAuthority("ADMIN")
                 // ENTORNO
-            .requestMatchers(HttpMethod.POST, "/entorno/create").hasAuthority("CLIENTE")
-            .requestMatchers(HttpMethod.PUT, "/entorno").hasAuthority("CLIENTE")
-            .requestMatchers(HttpMethod.DELETE, "/entorno").hasAuthority("CLIENTE")
-            .requestMatchers(HttpMethod.POST, "/entorno/anadirUrl/**").hasAuthority("CLIENTE")
-            .requestMatchers(HttpMethod.POST, "/entorno/actualizarUrl/**").hasAuthority("CLIENTE")
-            .requestMatchers(HttpMethod.GET, "/entorno/eliminarUrl").hasAuthority("CLIENTE")
             .requestMatchers(HttpMethod.GET, "/entorno").hasAuthority("CLIENTE")
+            .requestMatchers(HttpMethod.GET, "/entorno/{id}").hasAuthority("CLIENTE")
+            .requestMatchers(HttpMethod.GET, "/entorno/{entornoCod}/urls").hasAuthority("CLIENTE")
+            .requestMatchers(HttpMethod.GET, "/entorno/eliminarUrl/{idUrl}").hasAuthority("CLIENTE")
+            .requestMatchers(HttpMethod.POST, "/entorno/{codEnt}/anadirUrl").hasAuthority("CLIENTE")
+            .requestMatchers(HttpMethod.POST, "/entotno/actualizarUrl/{codEnt}").hasAuthority("CLIENTE")
+            .requestMatchers(HttpMethod.PUT, "/entorno").hasAuthority("CLIENTE")
+            .requestMatchers(HttpMethod.DELETE, "/entorno/{id}").hasAuthority("CLIENTE")
+                // SOLICITUD ENTORNO
+            .requestMatchers(HttpMethod.GET, "/solicitudEntorno/aceptar/{id}").hasAuthority("ADMIN")
+            .requestMatchers(HttpMethod.GET, "/solicitudEntorno/rechazar/{id}").hasAuthority("ADMIN")
+            .requestMatchers(HttpMethod.GET, "/solicitudEntorno/{id}").hasAnyAuthority("CLIENTE", "ADMIN")
+            .requestMatchers(HttpMethod.GET, "/solicitudEntorno").hasAuthority("ADMIN")
+            .requestMatchers(HttpMethod.POST, "/solicitudEntorno").hasAuthority("CLIENTE")
             .anyRequest().authenticated();
 
         http.addFilterBefore(JWTAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
